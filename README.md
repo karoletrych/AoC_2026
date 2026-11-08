@@ -2,8 +2,10 @@
 
 Solutions for [Advent of Code 2026](https://adventofcode.com/2026) written in Zig.
 
-All 25 days are wired up. Days 1–3 currently contain ports of the 2025
-solutions and will be replaced when the 2026 puzzles start.
+All 25 days are wired up. Days 1–12 currently contain ports of the 2025
+solutions and will be replaced when the 2026 puzzles start. Day 12 of 2025 had
+a single part; its solver uses the area check that the official inputs were
+built around.
 
 ## Requirements
 
@@ -31,6 +33,11 @@ zig build
 The runner reads `inputs/dayNN.txt`, then prints each part's answer and its
 runtime. Days without an implementation report `error.NotImplemented`.
 For long-running days add `-Doptimize=ReleaseFast` before `--`.
+
+### Status
+
+* Days 1–12: solved (2025 puzzles, both parts where the puzzle had two)
+* Days 13–25: templates waiting for the 2026 event
 
 ## Puzzle inputs
 
