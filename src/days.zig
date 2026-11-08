@@ -4,7 +4,7 @@ const std = @import("std");
 pub const count = 25;
 
 /// Signature every day module must implement.
-pub const SolveFn = *const fn (input: []const u8) anyerror!i64;
+pub const SolveFn = *const fn (allocator: std.mem.Allocator, input: []const u8) anyerror!i64;
 
 pub const Day = struct {
     part1: SolveFn,

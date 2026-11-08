@@ -60,14 +60,14 @@ pub fn main(init: std.process.Init) !void {
     const header = try std.fmt.bufPrint(&header_buf, "--- day {d:0>2} ---\n", .{day});
     try stdout.writeStreamingAll(io, header);
 
-    if (part == null or part == 1) try runPart(io, stdout, module, 1, input);
-    if (part == null or part == 2) try runPart(io, stdout, module, 2, input);
+    if (part == null or part == 1) try runPart(io, stdout, arena, module, 1, input);
+    if (part == null or part == 2) try runPart(io, stdout, arena, module, 2, input);
 }
 
-fn solve(module: days.Day, part: u8, input: []const u8) !i64 {
+fn solve(allocator: std.mem.Allocator, module: days.Day, part: u8, input: []const u8) !i64 {
     return switch (part) {
-        1 => module.part1(input),
-        2 => module.part2(input),
+        1 => module.part1(allocator, input),
+        2 => module.part2(allocator, input),
         else => unreachable,
     };
 }
@@ -75,6 +75,7 @@ fn solve(module: days.Day, part: u8, input: []const u8) !i64 {
 fn runPart(
     io: std.Io,
     stdout: std.Io.File,
+    allocator: std.mem.Allocator,
     module: days.Day,
     part: u8,
     input: []const u8,
@@ -82,7 +83,7 @@ fn runPart(
     var buf: [256]u8 = undefined;
 
     const start = std.Io.Clock.Timestamp.now(io, .awake);
-    const result = solve(module, part, input) catch |err| {
+    const result = solve(allocator, module, part, input) catch |err| {
         const msg = try std.fmt.bufPrint(&buf, "part {d}: error.{s}\n", .{ part, @errorName(err) });
         try stdout.writeStreamingAll(io, msg);
         return;

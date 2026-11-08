@@ -1,5 +1,15 @@
 const std = @import("std");
 
+pub const grid = @import("util/grid.zig");
+pub const vec = @import("util/vec.zig");
+pub const combinatorics = @import("util/combinatorics.zig");
+
+pub const Grid = grid.Grid;
+pub const Point = grid.Point;
+pub const fromLines = grid.fromLines;
+pub const Vec3 = vec.Vec3;
+pub const Permutations = combinatorics.Permutations;
+
 /// Reads `inputs/dayNN.txt` into memory owned by `gpa`.
 pub fn readDayInput(io: std.Io, gpa: std.mem.Allocator, day: u8) ![]u8 {
     var path_buf: [64]u8 = undefined;
@@ -27,4 +37,11 @@ test "Lines splits on LF and trims CR" {
     try std.testing.expectEqualStrings("beta", lines.next().?);
     try std.testing.expectEqualStrings("gamma", lines.next().?);
     try std.testing.expectEqual(@as(?[]const u8, null), lines.next());
+}
+
+test {
+    std.testing.refAllDecls(@This());
+    _ = @import("util/grid.zig");
+    _ = @import("util/vec.zig");
+    _ = @import("util/combinatorics.zig");
 }
