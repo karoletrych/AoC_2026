@@ -3,12 +3,6 @@ const util = @import("../util.zig");
 
 // https://adventofcode.com/2025/day/8
 
-const Point = struct {
-    x: i64,
-    y: i64,
-    z: i64,
-};
-
 const Pair = struct {
     distance: u64,
     a: u32,
@@ -105,36 +99,32 @@ const Dsu = struct {
     }
 };
 
-fn parsePoints(allocator: std.mem.Allocator, input: []const u8) ![]Point {
-    var points: std.ArrayList(Point) = .empty;
+fn parsePoints(allocator: std.mem.Allocator, input: []const u8) ![]util.Vec3 {
+    var points: std.ArrayList(util.Vec3) = .empty;
     defer points.deinit(allocator);
 
     var lines = util.Lines.init(input);
     while (lines.next()) |line| {
         if (line.len == 0) continue;
         var it = std.mem.splitScalar(u8, line, ',');
-        try points.append(allocator, .{
-            .x = try std.fmt.parseInt(i64, it.next() orelse return error.InvalidInput, 10),
-            .y = try std.fmt.parseInt(i64, it.next() orelse return error.InvalidInput, 10),
-            .z = try std.fmt.parseInt(i64, it.next() orelse return error.InvalidInput, 10),
-        });
+        try points.append(allocator, util.Vec3.init(
+            try std.fmt.parseInt(i64, it.next() orelse return error.InvalidInput, 10),
+            try std.fmt.parseInt(i64, it.next() orelse return error.InvalidInput, 10),
+            try std.fmt.parseInt(i64, it.next() orelse return error.InvalidInput, 10),
+        ));
     }
     return points.toOwnedSlice(allocator);
 }
 
-fn buildPairs(allocator: std.mem.Allocator, points: []const Point) ![]Pair {
+fn buildPairs(allocator: std.mem.Allocator, points: []const util.Vec3) ![]Pair {
     const count = points.len * (points.len - 1) / 2;
     const pairs = try allocator.alloc(Pair, count);
 
     var index: usize = 0;
     for (0..points.len) |i| {
         for (i + 1..points.len) |j| {
-            const dx = points[i].x - points[j].x;
-            const dy = points[i].y - points[j].y;
-            const dz = points[i].z - points[j].z;
-            const squared: i64 = dx * dx + dy * dy + dz * dz;
             pairs[index] = .{
-                .distance = @intCast(squared),
+                .distance = util.Vec3.distanceSquared(points[i], points[j]),
                 .a = @intCast(i),
                 .b = @intCast(j),
             };

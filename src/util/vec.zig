@@ -41,6 +41,15 @@ pub const Vec3 = struct {
         return @sqrt(dx * dx + dy * dy + dz * dz);
     }
 
+    /// Squared Euclidean distance. Use this when only ordering matters:
+    /// it avoids `sqrt` and keeps comparisons exact.
+    pub fn distanceSquared(a: Vec3, b: Vec3) u64 {
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const dz = a.z - b.z;
+        return @intCast(dx * dx + dy * dy + dz * dz);
+    }
+
     pub fn format(self: Vec3, writer: *std.Io.Writer) std.Io.Writer.Error!void {
         try writer.print("{d},{d},{d}", .{ self.x, self.y, self.z });
     }
@@ -55,6 +64,7 @@ test "Vec3 arithmetic and distance" {
     try std.testing.expect(Vec3.eql(.{ .x = 2, .y = 4, .z = 6 }, Vec3.scale(a, 2)));
     try std.testing.expectEqual(@as(u64, 7), Vec3.manhattan(a, b));
     try std.testing.expectEqual(@as(f64, 5.0), Vec3.distance(a, b));
+    try std.testing.expectEqual(@as(u64, 25), Vec3.distanceSquared(a, b));
 }
 
 test "Vec3 formats as x,y,z" {
