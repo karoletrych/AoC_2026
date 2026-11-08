@@ -2,7 +2,8 @@
 
 Solutions for [Advent of Code 2026](https://adventofcode.com/2026) written in Zig.
 
-This is a scaffold: all 25 days are wired up but not solved yet.
+All 25 days are wired up. Days 1–3 currently contain ports of the 2025
+solutions and will be replaced when the 2026 puzzles start.
 
 ## Requirements
 
@@ -20,23 +21,44 @@ zig build run -- 1 2
 # run tests
 zig build test
 
+# download a puzzle input (see below)
+zig build pull -- 1
+
 # build only
 zig build
 ```
 
 The runner reads `inputs/dayNN.txt`, then prints each part's answer and its
 runtime. Days without an implementation report `error.NotImplemented`.
+For long-running days add `-Doptimize=ReleaseFast` before `--`.
 
 ## Puzzle inputs
 
 Advent of Code asks participants not to publish their puzzle inputs, so
-`inputs/` is git-ignored. To run a day, save your own input there:
+`inputs/` is git-ignored. Inputs are stored as `inputs/dayNN.txt`.
 
+### Downloading inputs
+
+`zig build pull` uses your `session` cookie from a logged-in adventofcode.com
+session. Provide it either through the `AOC_SESSION` environment variable or in
+a `.aoc-session` file at the repository root (both are git-ignored):
+
+```bash
+# bash
+export AOC_SESSION=your-session-cookie
+# PowerShell
+$env:AOC_SESSION = "your-session-cookie"
 ```
-inputs/day01.txt
-inputs/day02.txt
-...
+
+Then:
+
+```bash
+zig build pull -- 1       # 2026 input -> inputs/day01.txt
+zig build pull -- 1 2025  # older puzzle  -> inputs/day01.txt
 ```
+
+The tool refuses HTML responses, so an expired session fails loudly instead of
+saving the login page as your input.
 
 ## Layout
 

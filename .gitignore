@@ -6,3 +6,6 @@ zig-cache/
 # Advent of Code puzzle inputs (private, not published)
 inputs/*
 !inputs/.gitkeep
+
+# Session cookie used by `zig build pull`
+.aoc-session
